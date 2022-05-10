@@ -48,7 +48,7 @@ mysqli_set_charset($link, "utf8");
                     </div>
                 </li>
             </ul>
-            <div class="block-text" id="block-1" style="hide:0">
+            <div class="block-text" id="block-1" style="display:none">
                 <table>
                     <tr>
                         <td style="border:1px solid grey;">ФИО Сотрудников</td>
@@ -58,8 +58,8 @@ mysqli_set_charset($link, "utf8");
                         jQuery(document).ready(function() {
                             $('input[name="menu"]').click(function() {
                                 var target = $('#block-' + $(this).val());
-                                $('.block-text').not(target).hide(0);
-                                target.fadeIn(500);
+                                $('.block-text').not(target).hide();
+                                target.show();
 
 
                             });
@@ -87,7 +87,7 @@ mysqli_set_charset($link, "utf8");
                 ?>
                 </table>
             </div>
-            <div class="block-text" id="block-2" style="hide:0">
+            <div class="block-text" id="block-2" style="display:none">
                 <table>
                     <tr>
                         <td style="border:1px solid grey;">ФИО Сотрудников</td>
@@ -116,7 +116,7 @@ mysqli_set_charset($link, "utf8");
                 ?>
                 </table>
             </div>
-            <div class="block-text" id="block-3" style="hide:0">
+            <div class="block-text" id="block-3" style="display:none">
                 <table>
                     <tr>
                         <td style="border:1px solid grey;">Отдел</td>
@@ -127,13 +127,9 @@ mysqli_set_charset($link, "utf8");
                     </tr>
 
                     <?php 
-                    $sql = 'SELECT department.name as dn, position.name, user.first_name, user.last_name FROM department INNER JOIN position on department.leader_id=position.id INNER JOIN user on department.leader_id=user.id' ;
-                    $sql2 = 'SELECT user_id, first_name, last_name FROM (SELECT user_id, ROW_NUMBER() OVER (PARTITION BY department_id ORDER BY p.created_at DESC) row_num,first_name, last_name FROM user_position p INNER JOIN user u ON p.user_id = u.id) t WHERE row_num = 1';
-                    
+                    $sql = 'select * from (SELECT department.name as dn, position.name, user.first_name, user.last_name, department.id as di FROM department INNER JOIN position on department.leader_id=position.id INNER JOIN user on department.leader_id=user.id) as t1 left join (SELECT user_id, department_id as di2, first_name as fn, last_name as ln FROM ( SELECT user_id, department_id, ROW_NUMBER() OVER ( PARTITION BY department_id ORDER BY p.created_at DESC) row_num , first_name, last_name FROM user_position p INNER JOIN user u ON p.user_id = u.id ) t WHERE row_num = 1) as t2 ON t1.di=t2.di2' ;
                     $result = mysqli_query($link, $sql);
-                    $result2 = mysqli_query($link, $sql2);
                     $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
-                    $rows2 = mysqli_fetch_all($result, MYSQLI_ASSOC);
                     foreach ($rows as $row) {
                         echo "
                         <tr>
@@ -145,13 +141,13 @@ mysqli_set_charset($link, "utf8");
                         </td>
                         
                         <td style='border:1px solid grey;'>
-                            $row2[first_name]  $row2[last_name]
-                        
+                            $row[fn]  $row[ln]
                         </td>
                         </tr>
                         ";
                     }
                 ?>
+
                 </table>
             </div>
 
