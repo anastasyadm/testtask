@@ -12,6 +12,7 @@ jQuery(document).ready(function() {
             },
 
             success: function (d) {
+                elem.classList.add('table');
                 elem.innerHTML = d;
             }
 

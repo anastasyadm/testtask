@@ -18,41 +18,37 @@ $select3 = 'select * from (SELECT department.name as dn, position.name, user.fir
         switch ($_POST["tar"]) {
             case 1:
                 $stmt = $pdo->query($select1);
-                $results = $stmt->fetch(PDO::FETCH_BOTH);
                 while ($results = $stmt->fetch(PDO::FETCH_BOTH)){
                     echo "<tr>";
-                    echo "<td>".$results['first_name'] . "</td>";
-                    echo "<td>".$results['last_name'] . "</td>";
+                    echo "<td>".$results['first_name'] ." ".$results['last_name'] . "</td>";
                     echo "<td>".$results['created_at'] . "</td>";
                     echo "</tr>";
                 }
-                break;
+                exit();
+
             case 2:
                 $stmt = $pdo->query($select2);
                 while ($results = $stmt->fetch(PDO::FETCH_BOTH)){
                     echo "<tr>";
-                    echo "<td>".$results['first_name'] . "</td>";
-                    echo "<td>".$results['last_name'] . "</td>";
+                    echo "<td>".$results['first_name'] ." ".$results['last_name'] . "</td>";
                     echo "<td>".$results['description'] . "</td>";
                     echo "</tr>";
                 }
+                exit();
 
 
-                break;
             case 3:
                 $stmt = $pdo->query($select3);
                 while ($results = $stmt->fetch(PDO::FETCH_BOTH)){
                     echo "<tr>";
                     echo "<td>".$results['dn'] . "</td>";
                     echo "<td>".$results['name'] . "</td>";
-                    echo "<td>".$results['first_name'] . "</td>";
-                    echo "<td>".$results['last_name'] . "</td>";
-                    echo "<td>".$results['fn'] . "</td>";
-                    echo "<td>".$results['ln'] . "</td>";
+                    echo "<td>".$results['first_name'] ." ".$results['last_name'] . "</td>";
+                    echo "<td>".$results['fn'] ." ".$results['ln'] . "</td>";
                     echo "</tr>";
                 }
+                exit();
 
-                break;
         }
     }
  }
